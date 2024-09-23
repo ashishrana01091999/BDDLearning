@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Input Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('uploadData/wallpaper.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            font-size: calc(100% - 2.5px); /* Decrease font size by 2.5px */
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-header img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        .form-header h2 {
+            margin-top: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #FFD700;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group button:hover {
+            background-color: #FFC107;
+        }
+        .form-group input[type="file"] {
+            padding: 0;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .file-upload {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.5;
+            font-size: 12px;
+            z-index: 0;
+            color: #ccc;
+        }
+        .loader {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            left: 48%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 70%;
+            max-width: 300px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .success-icon {
+            width: 175px;
+            height: 150px;
+        }
+        .success-message {
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="loader" id="loader"></div>
+
+<div class="container">
+    <div class="form-header">
+        <img src="uploadData/img.png" alt="Profile Image">
+        <h2>PTO Application</h2>
+    </div>
+    <form id="ptoForm">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="homeOwnerName">Home Owner's Name *</label>
+                <input type="text" id="homeOwnerName" name="homeOwnerName" required>
+            </div>
+            <div class="form-group">
+                <label for="homeOwnerAddress">Home Owner's Address *</label>
+                <input type="text" id="homeOwnerAddress" name="homeOwnerAddress" required>
+            </div>
+            <div class="form-group">
+                <label for="homeOwnerEmail">Home Owner's Email Address *</label>
+                <input type="email" id="homeOwnerEmail" name="homeOwnerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number *</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" required>
+            </div>
+            <div class="form-group">
+                <label for="utilityCompany">Home Owner's Utility Company *</label>
+                <input type="text" id="utilityCompany" name="utilityCompany" required>
+            </div>
+            <div class="form-group">
+                <label for="yearlyProduction1">Estimated Yearly Production 1 Year (kW)</label>
+                <input type="number" id="yearlyProduction1" name="yearlyProduction1" step="any">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" rows="4"></textarea>
+        </div>
+        <div class="form-grid">
+            <div class="form-group file-upload">
+                <label for="systemDesignDocument">System Design Document *</label>
+                <input type="file" id="systemDesignDocument" name="systemDesignDocument" accept=".pdf,.doc,.docx" required>
+                <p>Drag & Drop or click to browse files to attach<br>Following formats are supported: PDF, DOC, DOCX</p>
+            </div>
+            <div class="form-group file-upload">
+                <label for="utilityBills">Utility Bills (Not older than 3 months) *</label>
+                <input type="file" id="utilityBills" name="utilityBills" accept=".pdf,.doc,.docx" required>
+                <p>Drag & Drop or click to browse files to attach<br>Following formats are supported: PDF, DOC, DOCX</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<div class="watermark">WATTMONK Technologies Pvt Ltd</div>
+
+<!-- The Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <img src="uploadData/missonacc.gif" alt="Success" class="success-icon">
+        <p class="success-message">Form submitted successfully!</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('ptoForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        document.getElementById('loader').style.display = 'block'; // Show loader
+
+        // Simulate form submission delay
+        setTimeout(function() {
+            document.getElementById('loader').style.display = 'none'; // Hide loader
+            document.getElementById('successModal').style.display = 'block'; // Show success modal
+        }, 2000); // Simulate a 2 second delay for form submission
+    });
+
+    // Close the modal
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('successModal').style.display = 'none';
+    }
+
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('successModal')) {
+            document.getElementById('successModal').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
