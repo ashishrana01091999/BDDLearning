@@ -1,6 +1,6 @@
 Feature: Fill Basic Form
 
-  @runModule
+
   Scenario: Fill and submit PTO form
     Given I open the PTO form
     When I fill the form with data from Google Sheets
